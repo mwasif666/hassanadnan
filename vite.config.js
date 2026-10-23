@@ -21,8 +21,8 @@ const proxyTo = (transform) => ({
 });
 
 const seoImages = {
-  '/muhammad-wasif-senior-full-stack-developer-karachi.jpg': proxyTo('f_auto,q_auto'),
-  '/muhammad-wasif-full-stack-developer-og.jpg': proxyTo('f_jpg,q_auto,c_fill,w_1200,h_630,g_auto'),
+  '/hassan-adnan-portrait.png': proxyTo('f_auto,q_auto'),
+  '/hassan-adnan-portrait.png': proxyTo('f_jpg,q_auto,c_fill,w_1200,h_630,g_auto'),
 };
 
 export default defineConfig({
