@@ -1,0 +1,182 @@
+import { useEffect, useRef } from "react";
+import styles from "./DeveloperSystemsSection.module.css";
+import glowStyles from "./DeveloperSystemsGlow.module.css";
+import { cldUrl } from "../../lib/cloudinary";
+
+const gradient1 = cldUrl("gradient");
+const gradient2 = cldUrl("gradient02");
+const industryLogo = cldUrl("indus-logo");
+const networkShape = cldUrl("indus-shape");
+import serviceIcon01 from "../../assets/developer-systems/service-icon01.svg";
+import serviceIcon02 from "../../assets/developer-systems/service-icon02.svg";
+import serviceIcon03 from "../../assets/developer-systems/service-icon03.svg";
+import serviceIcon04 from "../../assets/developer-systems/service-icon04.svg";
+import serviceIcon05 from "../../assets/developer-systems/service-icon05.svg";
+import serviceIcon06 from "../../assets/developer-systems/service-icon06.svg";
+import serviceIcon07 from "../../assets/developer-systems/service-icon07.svg";
+
+const marqueeData = [
+  { tag: "FRONTEND", number: "UI", text: "React & Next.js interfaces" },
+  { tag: "BACKEND", number: "API", text: "Node.js, Express & Laravel" },
+  { tag: "DATABASE", number: "DATA", text: "MongoDB & PostgreSQL" },
+  { tag: "CMS", number: "WEB", text: "WordPress & Shopify builds" },
+  { tag: "DEPLOY", number: "LIVE", text: "From development to production" },
+];
+
+const ROW_SPEEDS = [10, 15, 10, 15, 10, 15];
+
+const capabilities = [
+  { icon: serviceIcon01, title: "React & Next.js" },
+  { icon: serviceIcon02, title: "Node.js & Express" },
+  { icon: serviceIcon03, title: "Databases & APIs" },
+  { icon: serviceIcon04, title: "WordPress & Shopify" },
+  { icon: serviceIcon05, title: "Integrations" },
+  { icon: serviceIcon06, title: "Performance" },
+  { icon: serviceIcon07, title: "Deployment & Support" },
+];
+
+function ApiItem({ item, repeatIndex }) {
+  return (
+    <div className={styles.apiItem} aria-hidden={repeatIndex > 0 ? "true" : undefined}>
+      <span className={`${styles.apiTag} ${item.red ? styles.dangerTag : ""}`}>
+        {item.tag}
+      </span>
+      <span className={`${styles.apiNumber} ${item.red ? styles.dangerNumber : ""}`}>
+        {item.number}
+      </span>
+      <p>{item.text}</p>
+    </div>
+  );
+}
+
+function ApiMarqueeRow({ speed, index }) {
+  return (
+    <div className={styles.apiRow} style={{ "--row-speed": `${speed}s`, "--row-index": index }}>
+      <div className={styles.apiTrack}>
+        {[0, 1, 2].map((repeatIndex) => (
+          <div className={styles.apiGroup} key={repeatIndex}>
+            {marqueeData.map((item) => (
+              <ApiItem
+                key={`${item.tag}-${item.text}`}
+                item={item}
+                repeatIndex={repeatIndex}
+              />
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CapabilityCard({ item, duplicate = false }) {
+  return (
+    <article className={styles.capabilityCard} aria-hidden={duplicate ? "true" : undefined}>
+      <div className={styles.capabilityIcon}>
+        <img src={item.icon} alt="" loading="lazy" decoding="async" />
+      </div>
+      <h3 style={{ fontFamily: "inherit" }}>{item.title}</h3>
+    </article>
+  );
+}
+
+export default function DeveloperSystemsSection() {
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const node = sectionRef.current;
+    if (!node) return undefined;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        node.dataset.active = entry.isIntersecting ? "true" : "false";
+      },
+      { rootMargin: "20% 0px 20% 0px", threshold: 0.02 },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={sectionRef}
+      className={styles.section}
+      id="developer-systems"
+      data-active="false"
+      style={{ fontFamily: "inherit" }}
+    >
+      <section className={styles.marqueeSection} aria-labelledby="developer-realtime-title">
+        <div className={styles.container}>
+          <header className={styles.sectionTitle}>
+            <span className={styles.subTitle}>Full-stack web development</span>
+            <h2 id="developer-realtime-title" style={{ fontFamily: "inherit" }}>
+              <span>From polished interfaces to powerful backends</span>
+            </h2>
+            <p className={styles.sectionDescription}>
+              I build complete web applications, from responsive React and Next.js
+              interfaces to backend logic, APIs and databases. MERN Stack, Laravel,
+              WordPress and Shopify, brought together from idea to launch.
+            </p>
+          </header>
+
+          <div className={styles.industryWrapper}>
+            <div className={styles.apiMarquee} aria-label="Full-stack development technologies and capabilities">
+              <div className={styles.apiMarqueeInner}>
+                {ROW_SPEEDS.map((speed, index) => (
+                  <ApiMarqueeRow key={`${speed}-${index}`} speed={speed} index={index} />
+                ))}
+              </div>
+
+              <div className={styles.gradientShape} aria-hidden="true">
+                <img src={gradient1} alt="" />
+              </div>
+              <div className={styles.gradientShapeTwo} aria-hidden="true">
+                <img src={gradient2} alt="" />
+              </div>
+            </div>
+
+            <div className={styles.logoStage} aria-hidden="true">
+              <img src={industryLogo} alt="" />
+            </div>
+          </div>
+        </div>
+
+        <img className={styles.networkShape} src={networkShape} alt="" aria-hidden="true" />
+
+        <div className={styles.gradientLines} aria-hidden="true">
+          <span />
+          <span />
+          <span />
+          <span />
+        </div>
+      </section>
+
+      <section
+        className={`${styles.capabilitiesSection} ${glowStyles.blueGlow}`}
+        aria-labelledby="developer-capabilities-title"
+      >
+        <div className={styles.container}>
+          <header className={styles.sectionTitle}>
+            <span className={styles.subTitle}>End-to-end capabilities</span>
+            <h2 id="developer-capabilities-title" style={{ fontFamily: "inherit" }}>
+              <span>Everything needed to move from idea to launch</span>
+            </h2>
+          </header>
+        </div>
+
+        <div className={styles.capabilityMarquee}>
+          <div className={styles.capabilityTrack}>
+            {[false, true].map((duplicate) => (
+              <div className={styles.capabilityGroup} key={duplicate ? "copy" : "original"}>
+                {capabilities.map((item) => (
+                  <CapabilityCard key={item.title} item={item} duplicate={duplicate} />
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}

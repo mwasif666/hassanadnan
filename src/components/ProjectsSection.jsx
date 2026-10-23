@@ -1,0 +1,370 @@
+import { Fragment, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { FlowButton } from "@/components/ui/flow-button";
+import { SkeletonImage, SkeletonVideo } from "./ui/SkeletonMedia";
+import { useScroll } from "../contexts/ScrollContext";
+import { cldRootUrl, cldUrl, cldVideoSources } from "../lib/cloudinary";
+import styles from "./ProjectsShowcase.module.css";
+
+// Screen recordings play at this rate — the capture is a slow scroll-through
+// and reads as sluggish at 1x inside a small card.
+const PREVIEW_PLAYBACK_RATE = 1.5;
+
+const projects = [
+  {
+    name: "Hierys",
+    url: "https://hierys.com/",
+    video: cldVideoSources("projects/hierys"),
+    // Verified from the site's production bundle: React/Vite, Tailwind,
+    // GSAP ScrollTrigger and react-router are all present.
+    services: ["React", "Vite", "Tailwind CSS", "GSAP ScrollTrigger", "React Router"],
+  },
+  {
+    name: "Bridge Precision Tools",
+    url: "https://bridgeprecisiontools.com/",
+    // 3.0 MB as uploaded, 168 KB as WebP at the width the card renders.
+    image: cldRootUrl("08c35040-9896-4390-9456-8a5edd94b73c.png", { version: "v1787685847" }),
+    // Read off the live page: generator tags for WordPress and WooCommerce
+    // 11.0.1, Elementor with pro-elements loaded, and the Hello Elementor
+    // parent theme. Google Tag Manager arrives via duracelltomi.
+    services: ["WordPress", "WooCommerce", "Elementor Pro", "Hello Elementor", "Google Tag Manager"],
+  },
+  {
+    name: "Econetix",
+    url: "https://econetix.net/",
+    image: "https://res.cloudinary.com/agymx2xx/image/upload/v1787152967/8645b931-5272-4f2f-a435-943e838018c6.png",
+    services: ["WordPress", "Elementor", "Advanced Custom Fields", "GSAP", "Three.js"],
+  },
+  {
+    name: "Offplan DXB",
+    url: "https://offplandxb.ae/",
+    image: cldUrl("projects/offplan-dxb"),
+    // Project owner confirms the production backend is Laravel with MySQL.
+    services: ["Laravel", "PHP", "MySQL", "JavaScript", "Google Tag Manager"],
+  },
+  {
+    name: "Petroc Energy",
+    url: "https://petrocenergy.com/",
+    image: cldUrl("projects/petroc-energy"),
+    // The live site exposes static .html routes; BuiltWith detects Formspree.
+    services: ["HTML5", "CSS3", "JavaScript", "Formspree"],
+  },
+  {
+    name: "Pinnacle Design Agency",
+    url: "https://www.pinnacledesignagency.com/",
+    image: cldUrl("projects/pinnacle"),
+    // Public fingerprinting confirms tawk.to; unverified PHP/Bootstrap/CMS
+    // implementation labels were removed rather than guessed.
+    services: ["HTML5", "CSS3", "JavaScript", "tawk.to"],
+  },
+  {
+    name: "ABET Global",
+    url: "https://abetglobal.com/",
+    image: cldUrl("projects/abet-global"),
+    // Project owner confirms React/JavaScript on the frontend with ASP.NET
+    // on the backend; IIS and Bootstrap are also present in production.
+    services: ["React", "JavaScript", "ASP.NET", "Microsoft IIS", "Bootstrap"],
+  },
+  {
+    name: "Vampire Tools",
+    url: "https://vampiretools.com/",
+    image: cldUrl("projects/vampire-tools"),
+    // WooCommerce is verified through the live commerce UI and a detected
+    // WooCommerce-specific WPC Frequently Bought Together installation.
+    services: ["WordPress", "WooCommerce", "WPC Frequently Bought Together", "Google Tag Manager"],
+  },
+  {
+    name: "Frontineers",
+    url: "https://frontineers.com/",
+    // The upload is a 10.1 MB PNG; f_auto,q_auto at the width the card
+    // actually renders brings it back under 700 KB as WebP.
+    image: cldRootUrl("frontineers.png", { version: "v1787683376" }),
+    // Verified from the live response: a `powered-by: Shopify` header, and
+    // Shopify.theme reporting schema_name "Horizon" under a working copy
+    // ("latest-copy-17may") rather than a stock install. Judge.me and gtag are
+    // both present, and the EN/DE hreflang pair with an EUR active currency is
+    // Shopify Markets doing the localisation.
+    services: ["Shopify", "Liquid", "Horizon Theme", "Shopify Markets", "Judge.me"],
+  },
+  {
+    name: "Hunza Dry Fruits Basket",
+    url: "https://hunzadryfruitsbasket.com/",
+    // Recording was uploaded to the Cloudinary root, hence folder: "".
+    video: cldVideoSources("Screen_Recording_2026-08-25_235152", { folder: "" }),
+    // Verified the same way as Frontineers: `powered-by: Shopify`, with
+    // Shopify.theme reporting Dawn 15.4.0 under a development copy. Judge.me
+    // handles reviews and the storefront carries a WhatsApp order route,
+    // which is how most of its customers actually check out.
+    services: ["Shopify", "Liquid", "Dawn Theme", "Judge.me", "WhatsApp Ordering"],
+  },
+  {
+    name: "ReactDeploy",
+    url: "https://reactdeploy-topaz.vercel.app/",
+    image: "https://res.cloudinary.com/dsjxs1umc/image/upload/v1760476956/xeehnphy66xfmqocq6nt.png",
+    // Keep this conservative: React app deployed on Vercel; no guessed router
+    // or build framework is displayed without a reliable production fingerprint.
+    services: ["React", "JavaScript", "CSS3", "Vercel"],
+  },
+  {
+    name: "PECO Engineering",
+    url: "https://pecoengg.com/",
+    image: "https://res.cloudinary.com/agymx2xx/image/upload/v1787153762/d0ed56f9-6be5-41df-88b3-2fb38bd6fe11.png",
+    // Keep portfolio-facing labels focused on the actual frontend stack.
+    services: ["React", "JavaScript", "CSS3"],
+  },
+  {
+    name: "Hope Plants Dubai",
+    url: "https://hopeplantsdubai.com/",
+    image: "https://res.cloudinary.com/dsjxs1umc/image/upload/v1760473976/colehff0isfg4wsowla3.png",
+    // Project owner confirms Laravel with MySQL for the production application.
+    services: ["Laravel", "PHP", "MySQL", "JavaScript"],
+  },
+  {
+    name: "Badaruddin",
+    url: "https://badaruddin.net/",
+    image: "https://res.cloudinary.com/agymx2xx/image/upload/v1787216455/49d87646-ffad-4e21-b4a8-67160f3fdb46.png",
+    services: ["HTML", "CSS", "JavaScript", "Bootstrap"],
+  },
+  {
+    name: "MindReach",
+    url: "https://mindreach.us/",
+    image: "https://res.cloudinary.com/agymx2xx/image/upload/v1787217646/d4ba021e-dd61-40e1-804b-b987e960213e.png",
+    // Project owner confirms React on the frontend and Laravel on the backend.
+    // PHP is included as Laravel's runtime; no database is guessed here.
+    services: ["React", "Laravel", "PHP", "Bootstrap", "CSS3"],
+  },
+];
+
+const INITIAL_PROJECT_COUNT = 6;
+
+/* How many rows each press of the toggle adds. The list pages in rather than
+   opening in one jump: sixteen cards at once is a wall of screenshots, and
+   every one of them is a video or a multi-megabyte still to fetch. */
+const PROJECT_PAGE_SIZE = 5;
+
+/* Names the project and the stack it was built on rather than saying "website
+   preview" twelve times — that pairing is what someone searching for a given
+   tool is actually after, and one helper keeps the img, video and iframe
+   labels from drifting apart. */
+function buildPreviewAlt(project) {
+  const stack = project.services?.slice(0, 3).join(", ");
+
+  return stack
+    ? `${project.name} website built with ${stack} by Hassan Adnan`
+    : `${project.name} website preview by Hassan Adnan`;
+}
+
+/* Play previews only while their project card is actually in view. */
+function ProjectVideo({ project }) {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const video = ref.current;
+    if (!video) return undefined;
+    const card = video.closest("article") ?? video;
+    let cardVisible = false;
+
+    const applyRate = () => {
+      video.playbackRate = PREVIEW_PLAYBACK_RATE;
+    };
+
+    const syncPlayback = () => {
+      if (!cardVisible || document.hidden) {
+        video.pause();
+        return;
+      }
+
+      applyRate();
+      const playRequest = video.play();
+      if (playRequest) playRequest.catch(() => {});
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        cardVisible = entry.isIntersecting && entry.intersectionRatio >= 0.3;
+        syncPlayback();
+      },
+      { threshold: [0, 0.3] },
+    );
+
+    applyRate();
+    video.pause();
+    video.addEventListener("loadedmetadata", applyRate);
+    document.addEventListener("visibilitychange", syncPlayback);
+    observer.observe(card);
+
+    return () => {
+      observer.disconnect();
+      video.pause();
+      video.removeEventListener("loadedmetadata", applyRate);
+      document.removeEventListener("visibilitychange", syncPlayback);
+    };
+  }, []);
+
+  return (
+    <SkeletonVideo
+      innerRef={ref}
+      className={styles.previewVideo}
+      muted
+      loop
+      playsInline
+      preload="metadata"
+      tabIndex={-1}
+      aria-label={buildPreviewAlt(project)}
+    >
+      {project.video.map((source) => (
+        <source key={source.type} src={source.src} type={source.type} />
+      ))}
+    </SkeletonVideo>
+  );
+}
+
+function LiveProjectPreview({ project }) {
+  if (project.video) {
+    return <ProjectVideo project={project} />;
+  }
+
+  if (project.image) {
+    return (
+      <SkeletonImage
+        className={styles.previewImage}
+        src={project.image}
+        alt={buildPreviewAlt(project)}
+        loading="lazy"
+        decoding="async"
+      />
+    );
+  }
+
+  return (
+    <iframe
+      className={styles.previewFrame}
+      src={project.url}
+      title={buildPreviewAlt(project)}
+      loading="lazy"
+      tabIndex={-1}
+      aria-hidden="true"
+    />
+  );
+}
+
+function ProjectRow({ project, index, revealed }) {
+  return (
+    <article
+      className={`${styles.row}${revealed ? ` ${styles.revealed}` : ""}`}
+      style={{ "--i": index }}
+    >
+      <div className={styles.identity}>
+        <span className={styles.number}>
+          ({String(index + 1).padStart(2, "0")})
+        </span>
+        <h3 className={styles.name}>
+          {project.name.split(" ").map((word, wordIndex) => (
+            <Fragment key={word}>
+              {wordIndex > 0 ? " " : null}
+              <span>{word}</span>
+            </Fragment>
+          ))}
+        </h3>
+      </div>
+
+      <div className={styles.services} aria-label={`${project.name} services`}>
+        {project.services.map((service) => (
+          <span key={service}>{service}</span>
+        ))}
+      </div>
+
+      <a
+        className={styles.visualLink}
+        href={project.url}
+        target="_blank"
+        rel="noreferrer"
+        aria-label={`Open ${project.name} website`}
+      >
+        <LiveProjectPreview project={project} />
+        <span className={styles.previewShade} aria-hidden="true" />
+      </a>
+    </article>
+  );
+}
+
+export default function ProjectsSection() {
+  const [visibleCount, setVisibleCount] = useState(INITIAL_PROJECT_COUNT);
+  const { scrollToY } = useScroll();
+  const toggleRef = useRef(null);
+  const anchorTopRef = useRef(null);
+  const visibleProjects = projects.slice(0, visibleCount);
+  const hasMore = projects.length > INITIAL_PROJECT_COUNT;
+  const allShown = visibleCount >= projects.length;
+
+  const handleToggle = () => {
+    // Only collapsing needs the scroll anchor. Adding rows appends them below
+    // the button, so nothing the reader is looking at moves; collapsing pulls
+    // the button up the page and would otherwise leave them mid-nowhere.
+    anchorTopRef.current = allShown
+      ? toggleRef.current?.getBoundingClientRect().top ?? null
+      : null;
+    setVisibleCount((count) =>
+      count >= projects.length
+        ? INITIAL_PROJECT_COUNT
+        : Math.min(count + PROJECT_PAGE_SIZE, projects.length),
+    );
+  };
+
+  useLayoutEffect(() => {
+    const before = anchorTopRef.current;
+    if (before === null) return;
+    anchorTopRef.current = null;
+
+    const after = toggleRef.current?.getBoundingClientRect().top;
+    if (after === undefined || after === before) return;
+    scrollToY(window.scrollY + (after - before));
+  }, [visibleCount, scrollToY]);
+
+  return (
+    <section className={styles.section} id="projects" aria-labelledby="projects-title">
+      <div className={styles.inner}>
+        <header className={styles.header}>
+          <div>
+            <span className={styles.eyebrow}>Selected work</span>
+            <h2 className={styles.title} id="projects-title">
+              Work built for <em>real businesses.</em>
+            </h2>
+          </div>
+
+          <div className={styles.headerSide}>
+            <p className={styles.copy}>
+              A selection of websites, e-commerce experiences and custom
+              platforms I have delivered across different industries.
+            </p>
+          </div>
+        </header>
+
+        <div className={styles.list} id="projects-list">
+          {visibleProjects.map((project, index) => (
+            <ProjectRow
+              project={project}
+              index={index}
+              revealed={index >= INITIAL_PROJECT_COUNT}
+              key={project.name}
+            />
+          ))}
+        </div>
+
+        {hasMore ? (
+          <div className={styles.moreToggleRow}>
+            <FlowButton
+              ref={toggleRef}
+              text={allShown ? "Show fewer projects" : "View more projects"}
+              tone="light"
+              type="button"
+              aria-expanded={allShown}
+              aria-controls="projects-list"
+              onClick={handleToggle}
+              className="min-w-[13rem] max-[420px]:w-full"
+            />
+          </div>
+        ) : null}
+      </div>
+    </section>
+  );
+}
