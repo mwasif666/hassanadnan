@@ -1,4 +1,4 @@
-# https://www.wasifmajeed.com/
+# https://mwasif666.github.io/hassanadnan/
 # Hassan Adnan (Hassan Adnan) — senior front-end developer in Karachi, Pakistan.
 #
 # Nothing is disallowed on purpose. The homepage is a React app, so a crawler
@@ -73,4 +73,4 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
-Sitemap: https://www.wasifmajeed.com/sitemap.xml
+Sitemap: https://mwasif666.github.io/hassanadnan/sitemap.xml
