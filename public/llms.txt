@@ -13,14 +13,14 @@ LinkedIn: https://www.linkedin.com/in/muhammad-wasif-944741202
 
 ## Services
 
-- [Front-End Developer in Karachi](https://www.wasifmajeed.com/front-end-developer-karachi): The senior craft: React, Next.js and TypeScript interfaces, accessibility and Core Web Vitals.
-- [React JS & Next JS Developer](https://www.wasifmajeed.com/react-nextjs-developer-karachi): Component-driven interfaces and server-rendered Next.js sites.
-- [Website Design & Development](https://www.wasifmajeed.com/website-design-development-karachi): Business websites in HTML, CSS and JavaScript, responsive and SEO-ready.
-- [WordPress Developer](https://www.wasifmajeed.com/wordpress-developer-karachi): Custom themes, WooCommerce stores, speed and security work.
-- [Shopify Developer](https://www.wasifmajeed.com/shopify-developer-karachi): Liquid, theme customisation, Shopify Markets, storefront speed.
-- [Laravel & PHP Developer](https://www.wasifmajeed.com/laravel-php-developer-karachi): Laravel with MySQL behind admin panels, listings and reporting.
-- [MERN Stack Developer](https://www.wasifmajeed.com/mern-stack-developer-karachi): MongoDB, Express.js, React and Node.js applications.
-- [Full Stack Web Development](https://www.wasifmajeed.com/full-stack-developer-karachi): End-to-end delivery, with an explicit split of where the seniority sits.
+- [Front-End Developer in Karachi](https://mwasif666.github.io/hassanadnan/front-end-developer-karachi): The senior craft: React, Next.js and TypeScript interfaces, accessibility and Core Web Vitals.
+- [React JS & Next JS Developer](https://mwasif666.github.io/hassanadnan/react-nextjs-developer-karachi): Component-driven interfaces and server-rendered Next.js sites.
+- [Website Design & Development](https://mwasif666.github.io/hassanadnan/website-design-development-karachi): Business websites in HTML, CSS and JavaScript, responsive and SEO-ready.
+- [WordPress Developer](https://mwasif666.github.io/hassanadnan/wordpress-developer-karachi): Custom themes, WooCommerce stores, speed and security work.
+- [Shopify Developer](https://mwasif666.github.io/hassanadnan/shopify-developer-karachi): Liquid, theme customisation, Shopify Markets, storefront speed.
+- [Laravel & PHP Developer](https://mwasif666.github.io/hassanadnan/laravel-php-developer-karachi): Laravel with MySQL behind admin panels, listings and reporting.
+- [MERN Stack Developer](https://mwasif666.github.io/hassanadnan/mern-stack-developer-karachi): MongoDB, Express.js, React and Node.js applications.
+- [Full Stack Web Development](https://mwasif666.github.io/hassanadnan/full-stack-developer-karachi): End-to-end delivery, with an explicit split of where the seniority sits.
 
 ## Selected live projects
 
