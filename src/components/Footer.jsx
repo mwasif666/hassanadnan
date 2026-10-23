@@ -11,7 +11,7 @@ import { useInView } from "../hooks/useInView";
 import { useClock } from "../hooks/useClock";
 import styles from "./Footer.module.css";
 
-const GITHUB_USER = "mwasif666";
+const GITHUB_USER = "mwasif666/hassanadnan";
 
 export default function Footer() {
   const ref = useRef(null);
@@ -53,7 +53,7 @@ export default function Footer() {
             href={CONTACT.whatsappUrl}
             target="_blank"
             rel="noreferrer noopener"
-            aria-label={`Let's connect on WhatsApp at ${CONTACT.phoneDisplay}`}
+            aria-label={`Email ${CONTACT.email}`}
             className="mt-[clamp(1.8rem,4vh,2.8rem)] max-[560px]:w-full"
           />
         </div>
@@ -92,7 +92,7 @@ export default function Footer() {
                   rel="noreferrer noopener"
                   className={styles.link}
                 >
-                  {CONTACT.phoneDisplay}
+                  {CONTACT.email}
                   <ArrowUpRight className={styles.linkIcon} />
                 </a>
               </li>
