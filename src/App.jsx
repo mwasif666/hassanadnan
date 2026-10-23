@@ -7,7 +7,6 @@ import StoktSections from "./components/stokt/StoktSections";
 import ProjectsSection from "./components/ProjectsSection";
 // import CaseStudiesSection from "./components/CaseStudiesSection"; // hidden for now
 import WhySection from "./components/why/WhySection";
-import JourneySection from "./components/journey/JourneySection";
 import DeveloperSystemsSection from "./components/developerSystems/DeveloperSystemsSection";
 import LocalSeoSection from "./components/seo/LocalSeoSection";
 import NavMenu from "./components/NavMenu";
@@ -48,7 +47,6 @@ export default function App() {
         <ProjectsSection />
         {/* <CaseStudiesSection /> */}
         <WhySection />
-        <JourneySection />
         <DeveloperSystemsSection />
         <LocalSeoSection />
       </main>
