@@ -1,0 +1,90 @@
+@layer legacy {
+/* Loader-only dark blue moving-grid background overrides. */
+.preloader {
+  background: #060010;
+}
+
+.preloader__background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  opacity: 1;
+  pointer-events: none;
+}
+
+.preloader__background canvas {
+  pointer-events: none !important;
+  cursor: default !important;
+}
+
+.preloader__panels {
+  z-index: 1;
+  pointer-events: none;
+}
+
+/*
+ * During loading the panels stay transparent so the animated blue grid,
+ * spotlight and grain remain visible. At 100% they instantly become solid
+ * black and then rise one-by-one using the original staggered panel motion.
+ */
+.preloader .preloader__panel {
+  --panel-glow: transparent;
+  border-right: 1px solid rgba(255, 255, 255, 0.025);
+  background: transparent;
+}
+
+.preloader .preloader__panel:last-child {
+  border-right: 0;
+}
+
+.preloader .preloader__panel::after {
+  display: none;
+}
+
+.preloader__content {
+  z-index: 2;
+}
+
+/*
+ * The title clips its overflow, which is what turns the word swap into a
+ * masked roll. Line-height 0.9 alone leaves no room below the baseline, so
+ * descenders ("Deployment") would be shaved off and the incoming word would
+ * appear mid-air. The padding opens that room and the negative margin puts the
+ * box back where `bottom` had it.
+ */
+.preloader__title {
+  padding-top: 0.16em;
+  padding-bottom: 0.2em;
+  margin-bottom: -0.2em;
+}
+
+/*
+ * Reference-style exit:
+ * 1. Hide the decorative background immediately.
+ * 2. Make the loader root transparent so the page can be revealed.
+ * 3. Keep five solid-black curtains above the page.
+ * 4. Let the existing staggered translateY animation lift each curtain.
+ */
+.preloader.is-complete {
+  background: transparent;
+}
+
+.preloader.is-complete .preloader__background {
+  opacity: 0;
+  visibility: hidden;
+  transition: none;
+}
+
+.preloader.is-complete .preloader__panel {
+  background: #000000;
+  border-right-color: rgba(255, 255, 255, 0.02);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .preloader__word {
+    animation-duration: 0.01ms !important;
+  }
+}
+
+}

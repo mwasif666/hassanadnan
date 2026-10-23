@@ -1,0 +1,1 @@
+export const CONTACT = { email: "hassanadnan245@gmail.com", phoneDisplay: "Email Hassan Adnan", phoneDigits: "", whatsappUrl: "mailto:hassanadnan245@gmail.com" };
