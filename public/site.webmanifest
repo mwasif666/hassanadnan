@@ -1,0 +1,35 @@
+{
+  "name": "Hassan Adnan - Senior Front-End Developer in Karachi",
+  "short_name": "Hassan Adnan",
+  "description": "Portfolio of Hassan Adnan (Hassan Adnan), a senior front-end developer in Karachi building React, Next.js and TypeScript interfaces, plus WordPress, WooCommerce and Shopify sites.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#010507",
+  "theme_color": "#0a0a0a",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/maskable-icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
