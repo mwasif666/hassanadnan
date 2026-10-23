@@ -1,0 +1,303 @@
+/*
+ * Blues here are the site's three: #48c2f2 highlight, #2563eb glow and #0098f1
+ * accent — the same trio the loader, hero backdrop and services panel run on.
+ * The section used to sit ~20 points lower in saturation and carried none of
+ * the royal blue at all, which read as a different palette rather than the same
+ * light source seen from further out.
+ */
+
+.section {
+  --why-title-y: 110px;
+  --why-title-scale: .88;
+  --why-planet-y: 190px;
+  --why-stars-y: 16px;
+  position: relative;
+  height: 195svh;
+  overflow: clip;
+  background: #000;
+  color: #fff;
+  font-family: "Onest", system-ui, sans-serif;
+}
+
+.stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 50% 62%, rgba(0, 152, 241, .2), transparent 29%),
+    radial-gradient(circle at 50% 47%, rgba(6, 26, 58, .72), rgba(1, 8, 16, .94) 54%, #000 78%);
+}
+
+.stars,
+.stars::before,
+.stars::after {
+  position: absolute;
+  inset: -6%;
+  pointer-events: none;
+}
+
+.stars {
+  z-index: 1;
+  opacity: .66;
+  transform: translate3d(0, var(--why-stars-y), 0);
+  background-image:
+    radial-gradient(circle at 3% 61%, rgba(218,247,255,.88) 0 1px, transparent 1.3px),
+    radial-gradient(circle at 10% 24%, rgba(72,194,242,.7) 0 1px, transparent 1.25px),
+    radial-gradient(circle at 15% 40%, rgba(255,255,255,.46) 0 1px, transparent 1.2px),
+    radial-gradient(circle at 22% 13%, rgba(72,194,242,.64) 0 1px, transparent 1.2px),
+    radial-gradient(circle at 31% 53%, rgba(234,250,255,.68) 0 1px, transparent 1.2px),
+    radial-gradient(circle at 36% 20%, rgba(255,255,255,.38) 0 1px, transparent 1.2px),
+    radial-gradient(circle at 43% 33%, rgba(72,194,242,.72) 0 1px, transparent 1.2px),
+    radial-gradient(circle at 51% 12%, rgba(255,255,255,.55) 0 1px, transparent 1.2px),
+    radial-gradient(circle at 55% 47%, rgba(206,239,252,.66) 0 1px, transparent 1.2px),
+    radial-gradient(circle at 62% 23%, rgba(72,194,242,.66) 0 1px, transparent 1.2px),
+    radial-gradient(circle at 70% 53%, rgba(255,255,255,.45) 0 1px, transparent 1.2px),
+    radial-gradient(circle at 77% 18%, rgba(222,247,255,.72) 0 1px, transparent 1.2px),
+    radial-gradient(circle at 84% 42%, rgba(72,194,242,.64) 0 1px, transparent 1.2px),
+    radial-gradient(circle at 91% 27%, rgba(255,255,255,.42) 0 1px, transparent 1.2px),
+    radial-gradient(circle at 96% 61%, rgba(222,247,255,.7) 0 1px, transparent 1.2px);
+  will-change: transform;
+}
+
+.stars::before {
+  content: "";
+  opacity: .34;
+  background-image:
+    radial-gradient(circle at 8% 74%, #fff 0 .8px, transparent 1px),
+    radial-gradient(circle at 18% 63%, #48c2f2 0 .8px, transparent 1px),
+    radial-gradient(circle at 28% 83%, #fff 0 .8px, transparent 1px),
+    radial-gradient(circle at 39% 68%, #fff 0 .8px, transparent 1px),
+    radial-gradient(circle at 48% 77%, #48c2f2 0 .8px, transparent 1px),
+    radial-gradient(circle at 58% 64%, #fff 0 .8px, transparent 1px),
+    radial-gradient(circle at 68% 81%, #48c2f2 0 .8px, transparent 1px),
+    radial-gradient(circle at 79% 71%, #fff 0 .8px, transparent 1px),
+    radial-gradient(circle at 89% 86%, #fff 0 .8px, transparent 1px);
+}
+
+.stars::after {
+  content: "";
+  opacity: .2;
+  filter: blur(.3px);
+  background: radial-gradient(circle at 50% 50%, rgba(0,152,241,.24), transparent 43%);
+}
+
+.title {
+  position: absolute;
+  z-index: 4;
+  top: 56%;
+  left: 50%;
+  display: block;
+  margin: 0;
+  padding: .05em .14em .18em;
+  overflow: visible;
+  transform: translate3d(-50%, calc(-50% + var(--why-title-y)), 0) scale(var(--why-title-scale));
+  transform-origin: center;
+  color: transparent;
+  background: linear-gradient(180deg, #48c2f2 0%, #c9edff 45%, #0098f1 70%, #0d3f87 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-stroke: .45px rgba(190, 236, 255, .16);
+  font-family: "Argesta Display", Georgia, "Times New Roman", serif;
+  font-size: clamp(10.5rem, 21vw, 27rem);
+  font-weight: 400;
+  line-height: .86;
+  letter-spacing: -.065em;
+  text-shadow: 0 0 2.4rem rgba(0, 152, 241, .11);
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.planet {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: -64%;
+  width: min(84vw, 96rem);
+  aspect-ratio: 1.72 / 1;
+  transform: translate3d(-50%, var(--why-planet-y), 0);
+  border: 1px solid rgba(72, 194, 242, .2);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 4%, rgba(72,194,242,.19), rgba(37,99,235,.1) 30%, rgba(6,24,52,.74) 56%, rgba(1,8,14,.98) 76%);
+  box-shadow:
+    inset 0 2px 7px rgba(190,236,255,.07),
+    0 -1.3rem 4rem rgba(0,152,241,.1);
+  will-change: transform;
+}
+
+.planet::before {
+  content: "";
+  position: absolute;
+  inset: 5% 8% 18%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 0%, rgba(72,194,242,.12), transparent 52%);
+  filter: blur(18px);
+}
+
+.cardsLayer {
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  pointer-events: none;
+}
+
+.card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(31vw, 36.5rem);
+  min-width: 27rem;
+  padding: clamp(1.3rem, 1.55vw, 1.8rem) clamp(1.4rem, 1.75vw, 1.95rem) clamp(1.35rem, 1.65vw, 1.9rem);
+  overflow: hidden;
+  border: 1px solid rgba(72,194,242,.22);
+  border-radius: 18px;
+  background:
+    linear-gradient(145deg, rgba(9,27,48,.97), rgba(6,13,22,.985));
+  box-shadow:
+    0 1.2rem 3.6rem rgba(0,0,0,.42),
+    0 .35rem 1.6rem rgba(0,152,241,.12),
+    inset 0 1px 0 rgba(197,237,253,.035);
+  opacity: 0;
+  transform: translate3d(-50%, -50%, 0) translate3d(0, 17vh, 0) scale(.91);
+  transform-origin: center;
+  cursor: grab;
+  pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: box-shadow 200ms ease, border-color 200ms ease;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+.card[data-dragging] {
+  cursor: grabbing;
+  border-color: rgba(96, 205, 247, .46);
+  box-shadow:
+    0 2.4rem 6rem rgba(0,0,0,.58),
+    0 .6rem 2.6rem rgba(0, 152, 241, .24),
+    inset 0 1px 0 rgba(197,237,253,.07);
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(72,194,242,.09), transparent 34%),
+    linear-gradient(135deg, rgba(255,255,255,.018), transparent 38%);
+}
+
+.card h3 {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  color: #f2fbff;
+  font-size: clamp(1.08rem, 1.22vw, 1.4rem);
+  font-weight: 560;
+  line-height: 1.15;
+  letter-spacing: -.027em;
+}
+
+.card p {
+  position: relative;
+  z-index: 1;
+  max-width: 96%;
+  margin: .8rem 0 0;
+  color: rgba(214,238,250,.7);
+  font-size: clamp(.86rem, .96vw, 1.04rem);
+  font-weight: 450;
+  line-height: 1.45;
+  letter-spacing: -.012em;
+}
+
+@media (max-width: 1250px) {
+  .title {
+    font-size: clamp(10rem, 22vw, 23rem);
+  }
+
+  .card {
+    width: min(34vw, 34rem);
+    min-width: 24rem;
+  }
+
+  .card p {
+    font-size: .9rem;
+  }
+}
+
+@media (max-width: 860px) {
+  .section {
+    height: auto;
+    min-height: 100svh;
+    overflow: hidden;
+  }
+
+  .stage {
+    position: relative;
+    height: auto;
+    min-height: 100svh;
+    padding: 6.5rem 1rem 4.5rem;
+  }
+
+  .title {
+    position: relative;
+    z-index: 4;
+    top: auto;
+    left: auto;
+    display: block;
+    margin: 1.25rem auto 3.25rem;
+    padding: .04em .1em .16em;
+    transform: none !important;
+    font-size: clamp(7.5rem, 31vw, 12rem);
+    line-height: .9;
+    letter-spacing: -.055em;
+    text-align: center;
+  }
+
+  .planet {
+    bottom: -11rem;
+    width: 155vw;
+    transform: translateX(-50%) !important;
+    opacity: .58;
+  }
+
+  .cardsLayer {
+    position: relative;
+    inset: auto;
+    display: grid;
+    gap: .85rem;
+  }
+
+  .card {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    min-width: 0;
+    transform: none !important;
+    opacity: 1 !important;
+    cursor: auto;
+    touch-action: auto;
+    user-select: auto;
+    -webkit-user-select: auto;
+  }
+
+  .card:nth-child(2),
+  .card:nth-child(4) {
+    margin-left: 3%;
+    width: 97%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stars,
+  .title,
+  .planet,
+  .card {
+    will-change: auto;
+  }
+}
