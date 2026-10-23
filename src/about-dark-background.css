@@ -1,0 +1,55 @@
+@layer legacy {
+/* Slow SharpLink-style wrap while preserving the original light About section. */
+.banner-about-track {
+  height: 235svh;
+  background: #dbe8f2;
+}
+
+.banner-about-stage,
+.banner-about-final-layer {
+  background: #dbe8f2;
+}
+
+/* Only the centre portrait card keeps the dark-blue visual treatment. */
+.about-feature-card {
+  border-color: rgba(0, 152, 241, 0.52);
+  background:
+    radial-gradient(
+      circle at 50% 24%,
+      rgba(0, 152, 241, 0.22),
+      transparent 42%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(4, 15, 30, 0.98),
+      rgba(3, 25, 51, 0.98) 58%,
+      rgba(3, 11, 22, 0.99)
+    );
+  box-shadow:
+    0 2rem 5rem rgba(28, 70, 108, 0.22),
+    0 0 3.2rem rgba(0, 152, 241, 0.1);
+}
+
+.about-linkedin-link {
+  border-color: rgba(0, 152, 241, 0.52);
+  background: rgba(3, 15, 28, 0.72);
+}
+
+.about-linkedin-link svg {
+  border-left-color: rgba(0, 152, 241, 0.52);
+}
+
+.about-linkedin-link:hover {
+  background: #0098f1;
+  color: #03111c;
+}
+
+@media (max-width: 900px) {
+  .banner-about-track,
+  .banner-about-stage,
+  .banner-about-final-layer {
+    background: #dbe8f2;
+  }
+}
+
+}
