@@ -1,0 +1,46 @@
+import { Code2 } from "lucide-react";
+import { cldUrl, PORTRAIT_ID } from "../lib/cloudinary";
+
+const PORTRAIT = cldUrl(PORTRAIT_ID);
+
+// Keep the original code icon while preserving the current About layout alignment.
+export default function AboutSection({ id = "about", className = "" }) {
+  return (
+    <section className={`about-story ${className}`.trim()} id={id}>
+      <div className="about-story__noise" aria-hidden="true" />
+      <div className="about-story__glow" aria-hidden="true" />
+
+      <div className="about-story__label">
+        <span className="about-story__label-orb" aria-hidden="true">
+          <i />
+        </span>
+        <span>About Us</span>
+      </div>
+
+      <div className="about-story__inner">
+        <div className="about-story__body">
+          <div className="about-story__code-orb" aria-hidden="true">
+            <Code2 />
+          </div>
+
+          <p className="about-story__statement">
+            Building <span>digital products</span> through thoughtful interfaces,
+            reliable systems, <span>clean engineering</span>, and
+            performance-focused experiences that <span>work beautifully.</span>
+          </p>
+
+          <div className="about-story__profile">
+            <div className="about-story__avatar">
+              <img src={PORTRAIT} alt="Hassan Adnan" draggable="false" />
+            </div>
+
+            <div className="about-story__profile-copy">
+              <strong>Hassan Adnan</strong>
+              <span>Full-Stack Web Developer</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
