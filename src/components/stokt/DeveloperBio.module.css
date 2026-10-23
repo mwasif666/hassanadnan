@@ -1,0 +1,251 @@
+/* No blue bloom on this section any more — it used to wash the top edge, was
+   moved to the foot, and is now gone entirely. Just the flat dark ramp. */
+.aboutAmbient,
+:global(#about) {
+  isolation: isolate;
+  background: linear-gradient(180deg, #03070b 0%, #04090e 34%, #03070b 100%) !important;
+}
+
+.aboutAmbient::before,
+:global(#about)::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(83, 172, 215, .1) 1px, transparent 1px),
+    linear-gradient(90deg, transparent 0%, rgba(42, 143, 191, .055) 50%, transparent 100%);
+  background-size: 21px 21px, 100% 100%;
+  opacity: .42;
+  pointer-events: none;
+}
+
+.aboutAmbient::after,
+:global(#about)::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: -20rem;
+  right: -18rem;
+  width: clamp(32rem, 48vw, 58rem);
+  aspect-ratio: 1;
+  border: 1px solid rgba(48, 163, 217, .14);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 7rem rgba(13, 92, 133, .05),
+    0 0 0 14rem rgba(13, 92, 133, .028);
+  pointer-events: none;
+}
+
+.aboutAmbient > *,
+:global(#about) > * {
+  position: relative;
+  z-index: 1;
+}
+
+.editorialBio {
+  /* Shared so the orb can be centred on the statement's first line by maths
+     rather than by a magic `top` that drifts at every breakpoint — both sides
+     of that sum scale with the viewport. */
+  --bio-pad: clamp(2rem, 2.6vw, 2.8rem);
+  --bio-statement-gap: clamp(2rem, 3vw, 3rem);
+  --bio-statement-size: clamp(1.5rem, 1.95vw, 2.3rem);
+  --bio-statement-leading: 1.26;
+  --bio-orb-size: clamp(3.65rem, 4.4vw, 4.7rem);
+
+  position: relative;
+  isolation: isolate;
+  justify-content: flex-start !important;
+  min-height: clamp(31rem, 35vw, 37rem) !important;
+  overflow: hidden !important;
+  padding: var(--bio-pad) !important;
+  /* The blue bloom that used to sit under the foot of this card is gone; the
+     faint off-centre wash stays so the panel is not flat. */
+  background:
+    radial-gradient(circle at 86% 42%, rgba(9, 86, 128, .18), transparent 35%),
+    linear-gradient(120deg, rgba(3, 9, 14, .99), rgba(3, 12, 19, .98)) !important;
+  box-shadow:
+    inset 0 -1px 0 rgba(130, 205, 255, .16),
+    inset 0 1px 0 rgba(255,255,255,.018),
+    0 1.2rem 3.4rem rgba(28, 118, 176, .08);
+}
+
+.editorialBio::before {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(96, 180, 219, .13) 1px, transparent 1px);
+  background-size: 19px 19px;
+  opacity: .32;
+  pointer-events: none;
+}
+
+.editorialBio::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -12rem;
+  right: -11rem;
+  width: clamp(29rem, 38vw, 43rem);
+  aspect-ratio: 1;
+  border: 1px solid rgba(31, 140, 194, .15);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 5.5rem rgba(5, 71, 108, .055),
+    0 0 0 11rem rgba(5, 71, 108, .03);
+  pointer-events: none;
+}
+
+.codeOrb {
+  position: absolute;
+  z-index: 3;
+  /* padding + the statement's own top margin lands on the first line box;
+     half a line down, half an orb back up, and the two centres meet. */
+  top: calc(
+    var(--bio-pad) + var(--bio-statement-gap)
+    + (var(--bio-statement-size) * var(--bio-statement-leading) / 2)
+    - (var(--bio-orb-size) / 2)
+  );
+  left: clamp(1.8rem, 2.8vw, 2.7rem);
+  display: grid;
+  width: var(--bio-orb-size);
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 36% 27%, rgba(255,255,255,.13), transparent 35%),
+    linear-gradient(145deg, rgba(39,48,59,.98), rgba(12,16,22,.98));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 .85rem 2rem rgba(0,0,0,.35);
+  color: #eef8fd;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: clamp(.78rem, .95vw, 1rem) !important;
+  font-weight: 700;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+  transform: rotate(-8deg);
+}
+
+.editorialStatement,
+.editorialBio > .editorialStatement {
+  position: relative;
+  z-index: 2;
+  width: auto;
+  max-width: none !important;
+  margin: var(--bio-statement-gap) clamp(.25rem, 1vw, 1rem) 0 clamp(5.3rem, 7.2vw, 7.6rem) !important;
+  color: rgba(174, 182, 190, .58) !important;
+  font-size: var(--bio-statement-size) !important;
+  font-weight: 620;
+  line-height: var(--bio-statement-leading) !important;
+  letter-spacing: -.045em !important;
+  text-wrap: balance;
+}
+
+.editorialStatement strong {
+  color: #f7f9fa;
+  font-weight: 650;
+}
+
+.editorialAuthor {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  margin: clamp(2rem, 2.7vw, 2.8rem) 0 0 clamp(5.3rem, 7.2vw, 7.6rem);
+}
+
+.editorialAvatar {
+  position: relative;
+  display: block;
+  width: clamp(3.3rem, 4vw, 4.15rem);
+  aspect-ratio: 1;
+  overflow: hidden;
+  flex: none;
+  border: 1px solid rgba(71, 197, 247, .58);
+  border-radius: 50%;
+  background: #052a3d;
+  box-shadow: 0 0 1.6rem rgba(14, 143, 199, .13);
+}
+
+.editorialAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 19%;
+  filter: saturate(.96) contrast(1.03) brightness(.94);
+  transform: scale(1.08);
+}
+
+.editorialAuthorCopy {
+  display: grid;
+  gap: .22rem;
+}
+
+.editorialAuthorCopy strong {
+  color: #f5f7f8;
+  font-size: clamp(.9rem, 1vw, 1.08rem);
+  font-weight: 650;
+  line-height: 1.1;
+}
+
+.editorialAuthorCopy small {
+  color: rgba(184, 204, 214, .6);
+  font-size: clamp(.72rem, .8vw, .86rem);
+  line-height: 1.2;
+}
+
+@media (max-width: 1180px) {
+  .editorialStatement,
+  .editorialBio > .editorialStatement {
+    margin-left: clamp(4.8rem, 6vw, 6rem) !important;
+    margin-right: 0 !important;
+    font-size: clamp(1.35rem, 2.2vw, 1.95rem) !important;
+  }
+
+  .editorialAuthor {
+    margin-left: clamp(4.8rem, 6vw, 6rem);
+  }
+}
+
+@media (max-width: 720px) {
+  .aboutAmbient::after,
+  :global(#about)::after {
+    top: -13rem;
+    right: -12rem;
+    width: 28rem;
+  }
+
+  .editorialBio {
+    min-height: 28rem !important;
+    padding: 1.55rem !important;
+  }
+
+  .editorialBio::after {
+    top: -9rem;
+    right: -12rem;
+    width: 28rem;
+  }
+
+  .codeOrb {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 3.35rem;
+    margin-top: .2rem;
+  }
+
+  .editorialStatement,
+  .editorialBio > .editorialStatement {
+    margin: 1.25rem 0 0 !important;
+    font-size: clamp(1.2rem, 5.4vw, 1.55rem) !important;
+    line-height: 1.32 !important;
+  }
+
+  .editorialAuthor {
+    margin: 1.8rem 0 0;
+  }
+}

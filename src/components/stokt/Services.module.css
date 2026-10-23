@@ -1,0 +1,513 @@
+/*
+ * Three acts scrubbed off one sticky viewport (see useServicesTimeline.js):
+ * hero → glass quote whose copy fills word by word and then stays parked →
+ * cards rising from below over that panel through three lanes. The section's
+ * height is set from JS so act three gets exactly as much scroll as it needs.
+ */
+
+.section {
+  position: relative;
+  isolation: isolate;
+  background: #050505;
+  color: #f5f4f2;
+  font-family: "Helvetica Neue", "Onest", Arial, sans-serif;
+}
+
+.section::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 26px 26px;
+  opacity: 0.5;
+  mask-image: radial-gradient(ellipse at 50% 40%, #000 22%, transparent 78%);
+}
+
+.viewport {
+  position: sticky;
+  top: 0;
+  display: grid;
+  height: 100svh;
+  overflow: hidden;
+  place-items: center;
+}
+
+.viewport > * {
+  grid-area: 1 / 1;
+}
+
+/* ------------------------------------------------------------- act one -- */
+
+.hero {
+  z-index: 2;
+  display: flex;
+  width: min(92vw, 1180px);
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  will-change: transform, opacity;
+}
+
+.hero h2 {
+  margin: 0;
+  color: #faf8f5;
+  font-size: clamp(4rem, 13.7vw, 13rem);
+  font-weight: 500;
+  line-height: 0.83;
+  letter-spacing: -0.065em;
+}
+
+.hero p {
+  max-width: 38ch;
+  margin: clamp(1.6rem, 3.4vw, 3rem) 0 0;
+  color: rgba(240, 238, 235, 0.56);
+  font-size: clamp(1rem, 1.5vw, 1.45rem);
+  font-weight: 500;
+  line-height: 1.42;
+}
+
+/* Sits above the display heading: "What I Do" reads as the brand line, this
+   is the line that says which service and which city. */
+.hero p.heroEyebrow {
+  max-width: none;
+  margin: 0 0 clamp(1rem, 2.2vw, 1.75rem);
+  color: rgba(240, 238, 235, 0.42);
+  font-size: clamp(0.72rem, 1vw, 0.875rem);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.tag {
+  margin: clamp(1.5rem, 3vw, 2.6rem) 0 0;
+  padding: clamp(0.8rem, 1.1vw, 1.1rem) clamp(1.5rem, 2.2vw, 2.1rem);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.045);
+  color: #f4f1ee;
+  font: inherit;
+  font-size: clamp(0.85rem, 1.05vw, 1rem);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 260ms ease, border-color 260ms ease;
+}
+
+.tag:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ------------------------------------------------------------- act two -- */
+
+/* The panel never fades — it is parked under the viewport and slides up into
+   the centre, so the only thing hiding it is the viewport's own clipping.
+   This transform is just the pre-GSAP resting spot; the timeline replaces it
+   with an exact pixel offset on the first frame. */
+.quote {
+  z-index: 3;
+  display: grid;
+  width: min(92vw, 1020px);
+  place-items: center;
+  transform: translate3d(0, 80vh, 0);
+  will-change: transform;
+}
+
+.quote > * {
+  grid-area: 1 / 1;
+}
+
+/* Something for the glass to actually refract. The blues are the same three
+   the loader and hero backdrop run on — #48c2f2 highlight, the rgba(37,99,235)
+   glow from noise-dark-blue-gradient-with-squares, and the #0098f1 accent — so
+   this bloom reads as the same light source as the top of the page. */
+.quoteGlow {
+  width: 80%;
+  aspect-ratio: 1.6 / 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 26% 32%, rgba(72, 194, 242, 0.3), transparent 58%),
+    radial-gradient(circle at 74% 68%, rgba(37, 99, 235, 0.38), transparent 58%),
+    radial-gradient(circle at 50% 50%, rgba(0, 152, 241, 0.16), transparent 76%);
+  filter: blur(80px);
+}
+
+.quotePanel {
+  width: 100%;
+  padding: clamp(2.4rem, 4.6vw, 4.6rem) clamp(1.8rem, 4vw, 4rem);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: clamp(20px, 2vw, 30px);
+  background: rgba(255, 255, 255, 0.045);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 2rem 6rem rgba(0, 0, 0, 0.42);
+  -webkit-backdrop-filter: blur(26px) saturate(150%);
+  backdrop-filter: blur(26px) saturate(150%);
+}
+
+.quoteText {
+  margin: 0;
+  font-size: clamp(1.15rem, 2.1vw, 2.05rem);
+  font-weight: 500;
+  line-height: 1.42;
+  letter-spacing: -0.028em;
+  text-align: center;
+  text-wrap: balance;
+}
+
+/* Each word is tweened from dim to lit, so the copy fills as you scrub. The
+   separating spaces are real text nodes in the JSX — a generated `::after`
+   space with `white-space: pre` would stop the paragraph wrapping at all. */
+.word {
+  color: rgba(244, 240, 236, 0.16);
+}
+
+/* ----------------------------------------------------------- act three -- */
+
+/* Above `.quote` (3), so the cards travel over the parked panel rather than
+   disappearing behind it. */
+.rail {
+  position: relative;
+  z-index: 4;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  opacity: 0;
+}
+
+/* The stage used to carry its own bloom to give the card glass something to
+   refract. It now passes over the quote panel and its glow, which does that
+   job — a second bloom on top would only haze the copy the cards cross. */
+
+.track {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+}
+
+/* -------------------------------------------------------------- cards -- */
+
+.card {
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+  --lane: 50%;
+  container-type: inline-size;
+  position: absolute;
+  top: 0;
+  left: var(--lane);
+  isolation: isolate;
+  width: min(36vw, 31rem, 56svh);
+  aspect-ratio: 0.86 / 1;
+  will-change: transform;
+  overflow: hidden;
+  border: 1px solid rgba(160, 208, 245, 0.1);
+  border-radius: clamp(14px, 1.2vw, 20px);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(226, 242, 255, 0.062) 0%,
+      rgba(198, 226, 250, 0.026) 48%,
+      rgba(214, 236, 255, 0.036) 100%
+    );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 18px 46px rgba(0, 0, 0, 0.3);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  backdrop-filter: blur(20px) saturate(160%);
+  transition: border-color 450ms ease, box-shadow 450ms ease;
+}
+
+/* `left` places a card on its lane centre line — the timeline adds the -50%
+   that pulls it back onto it, so `y` stays the only scrubbed property. */
+.card[data-lane="left"] { --lane: 22%; }
+.card[data-lane="middle"] { --lane: 50%; }
+.card[data-lane="right"] { --lane: 78%; }
+
+.card::before,
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 500ms ease;
+}
+
+/* Two pointer-tracked washes in the site blue: `::after` sits under the copy so
+   every card in the row warms up faintly as the pointer crosses the track, and
+   `::before` rides over it as a brighter highlight on the card actually hovered. */
+.card::before {
+  z-index: 4;
+  background: radial-gradient(
+    800px circle at var(--mouse-x) var(--mouse-y),
+    rgba(120, 205, 250, 0.13),
+    transparent 20%
+  );
+}
+
+.card::after {
+  z-index: 1;
+  background: radial-gradient(
+    600px circle at var(--mouse-x) var(--mouse-y),
+    rgba(0, 152, 241, 0.17),
+    transparent 20%
+  );
+}
+
+.track:hover .card::after { opacity: 1; }
+.card:hover::before { opacity: 1; }
+
+.card:hover {
+  border-color: rgba(126, 202, 245, 0.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 26px 58px rgba(0, 0, 0, 0.34),
+    0 0 3.5rem rgba(0, 152, 241, 0.13);
+}
+
+.cardIndex {
+  position: absolute;
+  z-index: 5;
+  top: 5cqw;
+  left: 5.5cqw;
+  color: rgba(240, 236, 232, 0.28);
+  font-size: 3cqw;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.cardCopy {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  padding: 13cqw 5.5cqw 0;
+  text-align: center;
+}
+
+.cardCopy h3 {
+  margin: 0 0 2cqw;
+  color: #f6f4f1;
+  font-size: 6.9cqw;
+  font-weight: 450;
+  /* Titles now run to two words plus a hyphen ("Front-End Development"), so
+     the leading has to survive a wrap instead of assuming one line. */
+  line-height: 1.06;
+  letter-spacing: -0.05em;
+}
+
+.cardCopy p {
+  max-width: 78cqw;
+  margin: 0 auto;
+  color: rgba(239, 236, 232, 0.49);
+  font-size: 3.26cqw;
+  font-weight: 400;
+  line-height: 1.43;
+  letter-spacing: -0.018em;
+}
+
+/* -------------------------------------------------------------- art -- */
+
+.artStage {
+  position: absolute;
+  z-index: 2;
+  inset: 43.5cqw 3.4cqw 5.4cqw;
+  display: grid;
+  overflow: hidden;
+  place-items: center;
+  pointer-events: none;
+}
+
+.lottieArt {
+  position: absolute;
+  inset: 0;
+  transform: scale(1.5);
+  transform-origin: center;
+}
+
+.lottieArt :global(svg) {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Two compositions sit low inside their own canvas and leave the most dead
+   space, so they need a bigger push plus an upward nudge to stay in frame. */
+.apps .lottieArt { transform: translateY(-11%) scale(2.05); }
+.commerce .lottieArt { transform: translateY(-7%) scale(1.9); }
+.integrations .lottieArt { transform: translateY(-7%) scale(1.45); }
+
+.mobileVideoWrap {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  overflow: hidden;
+  place-items: end center;
+}
+
+.mobileVideoWrap::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 72%;
+  height: 24%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  filter: blur(30px);
+}
+
+/* Absolute so the box matches the stage exactly: as a grid item the video's
+   `height: 100%` never resolved and it fell back to its square intrinsic
+   ratio, overflowing the stage and getting clipped. */
+.mobileVideo {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: 50% 100%;
+}
+
+.mobileVideoWrap[data-fit="center"] .mobileVideo {
+  object-position: 50% 50%;
+  transform: scale(0.95);
+}
+
+/* The keycap loop is framed tight in its own source, so the shared centre-fit
+   shrink left it much smaller than the phone on card three. Scoped to this card
+   only — card four uses the same fit and is already sized right. */
+.design .mobileVideoWrap[data-fit="center"] .mobileVideo {
+  transform: scale(1.38);
+}
+
+/* ---------------------------------------------------- pointer cursor -- */
+
+.customCursor {
+  --cursor-x: -100px;
+  --cursor-y: -100px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 80;
+  display: grid;
+  width: 25px;
+  height: 25px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 50%;
+  background: rgba(9, 8, 8, 0.2);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(calc(var(--cursor-x) - 50%), calc(var(--cursor-y) - 50%), 0) scale(0.72);
+  transition: opacity 180ms ease, transform 90ms linear;
+}
+
+.customCursor[data-visible="true"] {
+  opacity: 1;
+  transform: translate3d(calc(var(--cursor-x) - 50%), calc(var(--cursor-y) - 50%), 0) scale(1);
+}
+
+.customCursor i {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+@media (hover: none), (pointer: coarse) {
+  .customCursor { display: none; }
+  .card::after {
+    opacity: 0.24;
+    background: radial-gradient(520px circle at 62% 84%, rgba(255, 255, 255, 0.035), transparent 30%);
+  }
+}
+
+/* ------------------------------------------------- no-scrub fallback -- */
+
+/* Narrow screens and reduced-motion get the same content stacked normally,
+   with every act shown in full instead of scrubbed. */
+.section[data-static="true"] {
+  height: auto !important;
+  padding: clamp(5rem, 12vh, 9rem) 0;
+}
+
+.section[data-static="true"] .viewport {
+  position: static;
+  display: block;
+  height: auto;
+  padding-inline: clamp(1rem, 5vw, 3rem);
+}
+
+.section[data-static="true"] .viewport > * {
+  transform: none !important;
+  opacity: 1 !important;
+}
+
+.section[data-static="true"] .hero {
+  width: 100%;
+  margin-bottom: clamp(3rem, 8vh, 5rem);
+}
+
+.section[data-static="true"] .quote {
+  width: 100%;
+  margin-bottom: clamp(3rem, 8vh, 5rem);
+}
+
+.section[data-static="true"] .word {
+  color: rgba(250, 248, 245, 1);
+}
+
+.section[data-static="true"] .rail {
+  height: auto;
+  overflow: visible;
+}
+
+/* Act three is absolutely positioned when it is scrubbed, so the fallback has
+   to put the track and its cards back into normal flow before stacking them. */
+.section[data-static="true"] .track {
+  position: static;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: clamp(1rem, 4vw, 1.6rem);
+  transform: none !important;
+}
+
+/* Stacked full-width on mobile, six live backdrop blurs down one column is a
+   real cost for no gain — the tint alone carries the same look here. */
+.section[data-static="true"] .card {
+  position: static;
+  width: 100%;
+  aspect-ratio: auto;
+  transform: none !important;
+  min-height: 30rem;
+  background:
+    linear-gradient(180deg, rgba(226, 242, 255, 0.075), rgba(198, 226, 250, 0.035) 100%),
+    linear-gradient(180deg, #0d1219, #0a0e14);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+@media (max-width: 860px) {
+  .hero h2 { font-size: clamp(3.4rem, 18vw, 6rem); }
+  .quoteText { font-size: clamp(1.05rem, 4.4vw, 1.5rem); }
+  .cardCopy { padding: 11cqw 6cqw 0; }
+  .cardCopy h3 {
+    font-size: clamp(1.55rem, 7.2cqw, 2.1rem);
+    line-height: 1.05;
+  }
+  .cardCopy p {
+    max-width: 82cqw;
+    font-size: clamp(.82rem, 3.8cqw, .98rem);
+    line-height: 1.5;
+  }
+  .section[data-static="true"] .card { min-height: clamp(29rem, 132vw, 33rem); }
+}
