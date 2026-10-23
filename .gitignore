@@ -1,0 +1,14 @@
+node_modules
+dist
+dist-ssr
+*.local
+.DS_Store
+
+# Local environment values are never committed.
+.env
+.env.*
+!.env.example
+
+# The brand package lives on Cloudinary (scripts/upload-brand.mjs); the local
+# copy is the upload source, not something the site builds from.
+wasifmajeed-brand-package/
