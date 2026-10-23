@@ -15,10 +15,10 @@ export default function HeroPitch() {
 
       <div className={styles.actions}>
         <FlowButton
-          text="Download resume"
+          text="Email Hassan"
           tone="light"
-          href={RESUME_URL}
-          target="_blank"
+          href="mailto:hassanadnan245@gmail.com"
+          target="_self"
           rel="noopener noreferrer"
           className="max-[520px]:w-full"
         />
