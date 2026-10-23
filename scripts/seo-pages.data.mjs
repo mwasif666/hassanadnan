@@ -8,9 +8,9 @@
  */
 
 export const SITE = {
-  origin: "https://www.wasifmajeed.com",
+  origin: "https://mwasif666.github.io/hassanadnan",
   whatsapp:
-    "https://wa.me/923013769247?text=Hi%20Wasif%2C%20I%27d%20like%20to%20discuss%20a%20project.",
+    "mailto:hassanadnan245@gmail.com",
   lastmod: "2026-08-25",
   year: new Date().getFullYear(),
 };
@@ -19,10 +19,10 @@ export const PERSON = {
   name: "Hassan Adnan",
   alternateName: "Hassan Adnan",
   email: "hassanadnan245@gmail.com",
-  phoneDisplay: "+92 301 3769247",
+  phoneDisplay: "Email Hassan Adnan",
   telephone: "+92-301-3769247",
-  github: "https://github.com/mwasif666",
-  linkedin: "https://www.linkedin.com/in/muhammad-wasif-944741202",
+  github: "https://github.com/mwasif666/hassanadnan",
+  linkedin: "https://github.com/mwasif666/hassanadnan",
 };
 
 /* Shared project pool — the stacks match what is verified on the portfolio. */
