@@ -1,0 +1,537 @@
+.section {
+  --journey-pad-top: clamp(4rem, 8.2vh, 6.4rem);
+  --journey-pad-bottom: clamp(2.5rem, 6vh, 4.5rem);
+  --journey-heading-size: clamp(2.6rem, 4.4vw, 5.4rem);
+  --journey-heading-gap: clamp(1.6rem, 3.6vh, 3rem);
+  --journey-heading-opacity: 0;
+  --journey-heading-y: 26px;
+  /* The photo is fully visible before any scroll — only the heading reveals. */
+  --journey-visual-scale: 1.02;
+  --journey-gap: 0vw;
+  --journey-seam: 0px;
+  --journey-outer: 22px;
+  --journey-edge: 0;
+  --journey-shadow: 0;
+  --journey-split: 0;
+  --journey-grid-y: 18px;
+  /* One heading line plus the stage chrome, so the panels only ever claim the
+     height that is genuinely left over — the cards can never run past the
+     bottom of the sticky viewport. The last term is slack for the drift and
+     scale the cards pick up while they separate. */
+  --journey-reserve: calc(
+    var(--journey-pad-top) + var(--journey-pad-bottom) +
+      var(--journey-heading-gap) + var(--journey-heading-size) * 1.06 + 2.5rem
+  );
+  position: relative;
+  height: 315svh;
+  overflow: clip;
+  background: #010507;
+  color: #edfaff;
+  font-family: "Onest", system-ui, sans-serif;
+}
+
+.stage {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100svh;
+  padding: var(--journey-pad-top) clamp(1rem, 4vw, 3rem)
+    var(--journey-pad-bottom);
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(
+      ellipse at 50% 47%,
+      rgba(16, 92, 126, 0.12),
+      transparent 42%
+    ),
+    linear-gradient(180deg, #010405 0%, #01070a 58%, #000 100%);
+}
+
+.grid {
+  position: absolute;
+  z-index: 0;
+  inset: -5%;
+  transform: translate3d(0, var(--journey-grid-y), 0);
+  opacity: 0.52;
+  pointer-events: none;
+  background-image: radial-gradient(
+    circle,
+    rgba(75, 151, 184, 0.24) 0 1.4px,
+    transparent 1.6px
+  );
+  background-size: 43px 43px;
+  mask-image: radial-gradient(
+    ellipse at 50% 50%,
+    #000 32%,
+    rgba(0, 0, 0, 0.68) 62%,
+    transparent 92%
+  );
+  will-change: transform;
+}
+
+.heading {
+  position: relative;
+  z-index: 7;
+  flex: 0 0 auto;
+  width: min(94vw, 82rem);
+  margin: 0 0 var(--journey-heading-gap);
+  transform: translate3d(0, var(--journey-heading-y), 0);
+  opacity: var(--journey-heading-opacity);
+  color: #effcff;
+  font-family: "Argesta Display", Georgia, "Times New Roman", serif;
+  font-size: var(--journey-heading-size);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  text-align: center;
+  /* A second line would eat into the panels and overlap the cards. */
+  white-space: nowrap;
+  text-shadow: 0 0 1.4rem rgba(89, 192, 231, 0.16);
+  will-change: transform, opacity;
+}
+
+.heading em {
+  font-weight: inherit;
+}
+
+.frame {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 0;
+}
+
+.panels {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--journey-gap);
+  width: min(84vw, 90rem, calc((100svh - var(--journey-reserve)) * 1.9));
+  /* Snapped to a multiple of 6 so the three columns land on whole pixels —
+     fractional column widths antialias into a hairline seam at each cut. */
+  width: round(
+    down,
+    min(84vw, 90rem, calc((100svh - var(--journey-reserve)) * 1.9)),
+    6px
+  );
+  max-width: 100%;
+  aspect-ratio: 1.9 / 1;
+  transform: scale(var(--journey-visual-scale));
+  /* Deep perspective: keeps a mid-flip card from swelling into the heading. */
+  perspective: 2600px;
+  box-shadow:
+    0 2.8rem 8rem rgba(0, 0, 0, calc(0.5 * (1 - var(--journey-split)))),
+    0 0 7rem rgba(52, 150, 196, calc(0.2 * (1 - var(--journey-split))));
+  will-change: transform;
+}
+
+/* Specular sweep across the uncut photo; retires as the photo is cut. */
+.shine {
+  position: absolute;
+  z-index: 6;
+  inset: 0;
+  overflow: hidden;
+  border-radius: var(--journey-outer);
+  opacity: calc(1 - var(--journey-split));
+  pointer-events: none;
+}
+
+/* No mix-blend-mode: .shine is its own stacking context, so a blend mode
+   would composite against nothing instead of the photo underneath. */
+.shine::before {
+  content: "";
+  position: absolute;
+  top: -60%;
+  left: 0;
+  width: 24%;
+  height: 220%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(214, 243, 255, 0.07) 24%,
+    rgba(244, 252, 255, 0.3) 50%,
+    rgba(214, 243, 255, 0.07) 76%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  filter: blur(6px);
+  animation: journey-sweep 5.5s linear 1.2s infinite;
+}
+
+.shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.06) 0%,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 255, 255, 0) 72%,
+    rgba(120, 205, 245, 0.06) 100%
+  );
+}
+
+@keyframes journey-sweep {
+  0% {
+    transform: translateX(-150%) rotate(16deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  46% {
+    opacity: 1;
+  }
+  54% {
+    transform: translateX(560%) rotate(16deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(560%) rotate(16deg);
+    opacity: 0;
+  }
+}
+
+/* Full-size copy of the photo sitting behind the three slices. Two adjacent
+   slices meet on a fractional device pixel and antialias into a hairline;
+   this backfills it with the identical pixels. Retires the moment the cut
+   starts opening, before any real gap is visible. */
+.panels::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: var(--journey-outer);
+  background-image:
+    linear-gradient(180deg, rgba(2, 13, 18, 0.02), rgba(0, 18, 28, 0.16)),
+    url("https://res.cloudinary.com/agymx2xx/image/upload/f_auto,q_auto,c_fill,ar_1.9,g_auto/v1787218446/me.png");
+  background-repeat: no-repeat;
+  background-position: center, center;
+  background-size:
+    100% 100%,
+    100% auto;
+  opacity: clamp(0, calc(1 - var(--journey-split) * 20), 1);
+  pointer-events: none;
+}
+
+/* Ring around the montage while it is still one single image. */
+.panels::after {
+  content: "";
+  position: absolute;
+  z-index: 6;
+  inset: 0;
+  pointer-events: none;
+  border: 1px solid rgba(105, 196, 232, calc(0.2 * (1 - var(--journey-split))));
+  border-radius: var(--journey-outer);
+}
+
+.card {
+  --card-flip: 0deg;
+  --card-copy-opacity: 0;
+  --card-copy-y: 24px;
+  --card-radius-left: var(--journey-seam);
+  --card-radius-right: var(--journey-seam);
+  position: relative;
+  min-width: 0;
+  transform-origin: center;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.card:first-child {
+  --card-radius-left: var(--journey-outer);
+}
+.card:last-child {
+  --card-radius-right: var(--journey-outer);
+}
+
+.cardInner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform: rotateY(var(--card-flip));
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.cardFace {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: var(--card-radius-left) var(--card-radius-right)
+    var(--card-radius-right) var(--card-radius-left);
+  background: #061018;
+  box-shadow:
+    inset 0 0 0 1px rgba(101, 191, 226, var(--journey-edge)),
+    0 1.6rem 4.5rem rgba(0, 0, 0, var(--journey-shadow));
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Transparent, so the sub-pixel edge of a slice antialiases against the
+   backing copy of the photo rather than against a dark card background. */
+.cardFront {
+  transform: rotateY(0deg);
+  background: transparent;
+}
+.cardBack {
+  transform: rotateY(180deg);
+}
+
+.panelImage {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background-image: url("https://res.cloudinary.com/agymx2xx/image/upload/f_auto,q_auto,c_fill,ar_1.9,g_auto/v1787218446/me.png");
+  background-repeat: no-repeat;
+  background-size: 300% auto;
+}
+
+/* Vertical only — a horizontal gradient would restart at every slice and
+   draw a visible seam while the three pieces still read as one photo. */
+.panelImage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(2, 13, 18, 0.02),
+    rgba(0, 18, 28, 0.16)
+  );
+  mix-blend-mode: multiply;
+}
+
+/* The three slices tile back into one uncut photo when the gap is 0. */
+.card:nth-child(1) .panelImage {
+  background-position: 0% center;
+}
+.card:nth-child(2) .panelImage {
+  background-position: 50% center;
+}
+.card:nth-child(3) .panelImage {
+  background-position: 100% center;
+}
+
+.surface {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  pointer-events: none;
+}
+
+.card:nth-child(1) .surface {
+  background:
+    radial-gradient(
+      circle at 30% 18%,
+      rgba(255, 255, 255, 0.55),
+      transparent 30%
+    ),
+    linear-gradient(155deg, #e9f5f8 0%, #bddce8 100%);
+}
+
+.card:nth-child(2) .surface {
+  background:
+    radial-gradient(
+      circle at 46% 0%,
+      rgba(143, 229, 255, 0.28),
+      transparent 33%
+    ),
+    linear-gradient(160deg, #1287b8 0%, #075074 54%, #03293e 100%);
+}
+
+.card:nth-child(3) .surface {
+  background:
+    radial-gradient(
+      circle at 25% 10%,
+      rgba(72, 161, 200, 0.12),
+      transparent 36%
+    ),
+    linear-gradient(155deg, #0a1218 0%, #04090d 100%);
+}
+
+.icon {
+  position: absolute;
+  z-index: 3;
+  top: clamp(1.25rem, 2.1vw, 2rem);
+  left: clamp(1.25rem, 2.1vw, 2rem);
+  /* Lordicon draws inside a padded 500×500 artboard, so the box runs larger
+     than the inline icons it replaced to land on the same optical size. */
+  width: clamp(2.6rem, 3.6vw, 4rem);
+  height: clamp(2.6rem, 3.6vw, 4rem);
+  opacity: var(--card-copy-opacity);
+  transform: translateY(var(--card-copy-y));
+  color: rgba(226, 248, 255, 0.82);
+  will-change: transform, opacity;
+}
+
+.card:nth-child(1) .icon {
+  color: rgba(5, 33, 46, 0.74);
+}
+
+/* The Lordicon animation renders here; the inline icon underneath is only
+   ever seen if the CDN request never lands. */
+.iconPlayer,
+.iconFallback {
+  position: absolute;
+  inset: 0;
+}
+
+.icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.copy {
+  position: absolute;
+  z-index: 4;
+  inset: auto clamp(1.4rem, 2.2vw, 2.2rem) clamp(1.5rem, 2.45vw, 2.55rem);
+  opacity: var(--card-copy-opacity);
+  transform: translateY(var(--card-copy-y));
+  will-change: transform, opacity;
+}
+
+.copy h3 {
+  max-width: 15ch;
+  margin: 0;
+  color: #effcff;
+  font-size: clamp(1.65rem, 2.35vw, 3rem);
+  font-weight: 520;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+
+.copy p {
+  max-width: 30ch;
+  margin: clamp(2.2rem, 7vh, 5.5rem) 0 0;
+  color: rgba(211, 237, 247, 0.7);
+  font-size: clamp(0.82rem, 0.92vw, 1.02rem);
+  line-height: 1.45;
+}
+
+.card:nth-child(1) .copy h3,
+.card:nth-child(1) .copy p {
+  color: #07151d;
+}
+.card:nth-child(1) .copy p {
+  color: rgba(7, 21, 29, 0.65);
+}
+
+@media (max-width: 1180px) {
+  .copy h3 {
+    font-size: clamp(1.5rem, 2.5vw, 2.6rem);
+  }
+  .copy p {
+    margin-top: 3rem;
+  }
+}
+
+@media (max-width: 820px) {
+  .section {
+    height: auto;
+    min-height: 100svh;
+    padding: 0;
+  }
+
+  .stage {
+    position: relative;
+    display: block;
+    height: auto;
+    padding: 7.5rem 1rem 4.5rem;
+    overflow: visible;
+    background: transparent;
+  }
+
+  .grid {
+    position: fixed;
+    opacity: 0.28;
+  }
+
+  .heading {
+    width: 100%;
+    margin: 0 auto 2.8rem;
+    transform: none !important;
+    opacity: 1 !important;
+    font-size: clamp(3.1rem, 12vw, 5.2rem);
+    white-space: normal;
+  }
+
+  .frame {
+    display: block;
+  }
+
+  .panels {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem !important;
+    width: 100% !important;
+    max-width: none;
+    aspect-ratio: auto;
+    transform: none !important;
+    box-shadow: none;
+  }
+
+  .panels::before,
+  .panels::after,
+  .shine {
+    display: none;
+  }
+
+  .card {
+    min-height: 25rem;
+    transform: none !important;
+  }
+
+  .cardInner {
+    height: 100%;
+    transform: none !important;
+  }
+
+  .cardFront {
+    display: none;
+  }
+
+  .cardBack {
+    position: relative;
+    min-height: 25rem;
+    transform: none;
+    border-radius: 20px;
+  }
+
+  .icon,
+  .copy {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .copy h3 {
+    font-size: clamp(2rem, 8vw, 3rem);
+  }
+  .copy p {
+    margin-top: clamp(2.75rem, 10vw, 4rem);
+    font-size: 0.95rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grid,
+  .panels,
+  .card,
+  .cardInner,
+  .icon,
+  .copy {
+    will-change: auto;
+  }
+
+  .shine::before {
+    animation: none;
+    opacity: 0;
+  }
+}
